@@ -58,28 +58,30 @@
 ## 项目结构
 
 ```
-├── index.html        # 独立网页工具入口
-├── app.js            # 网页工具逻辑（API 调用 + UI 交互）
-├── style.css         # 网页工具样式
-├── manifest.json     # Chrome 扩展配置
-├── background.js     # 扩展 Service Worker（API 调用）
-├── popup.html        # 扩展弹窗页面
-├── popup.js          # 扩展弹窗逻辑
-├── popup.css         # 扩展弹窗样式
-└── README.md
+Image-Prompt-Generator/
+├─ Web 独立网页
+│  ├─ index.html      # 入口页面
+│  ├─ app.js          # 页面逻辑与 API 调用
+│  └─ style.css       # 页面样式
+├─ Chrome 扩展
+│  ├─ manifest.json   # 扩展配置
+│  ├─ background.js   # Service Worker / API 调用
+│  ├─ popup.html      # 扩展弹窗页面
+│  ├─ popup.js        # 扩展弹窗逻辑
+│  └─ popup.css       # 扩展弹窗样式
+├─ assets/
+│  └─ screenshots/    # README 演示图片
+└─ README.md
 ```
 
 ## 输出示例
 
 ```
 【中文描述】
-一幅赛博朋克风格的城市夜景，霓虹灯光映照在潮湿的街道上，远处高楼林立。
+这是一张动漫风格的截图。画面右侧是一个有着深紫色头发、绿眼睛的年轻女孩，她穿着带有红边的白色水手服，正回头微笑着。背景是窗外的黄昏或傍晚景色，窗玻璃上隐约映出她的倒影。整体色调柔和，带有怀旧的氛围。
 
 【English Prompt】
-cyberpunk cityscape at night, neon lights reflecting on wet streets,
-towering skyscrapers in the background, rain-soaked atmosphere,
-volumetric lighting, cinematic composition, ultra-detailed,
-purple and blue color palette, blade runner aesthetic, 8k resolution
+anime style, a young girl with dark purple hair in a low bun, green eyes, smiling, looking back over her shoulder, wearing a white sailor uniform with red trim. She is indoors near a window. Outside the window is a dusk or twilight sky with orange and dark blue hues. The girl's faint reflection can be seen on the window glass. Soft lighting, nostalgic atmosphere, 2d animation, high quality, cinematic composition.
 ```
 
 ## 隐私说明
