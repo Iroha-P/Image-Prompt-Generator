@@ -23,6 +23,32 @@
     </header>
 
     <main class="main">
+      <section class="hero-card">
+        <div class="hero-copy">
+          <span class="hero-badge">AI Vision Prompt Tool</span>
+          <h1>上传图片，自动生成高质量绘图提示词</h1>
+          <p class="hero-description">
+            支持本地上传、图片 URL、网页右键识图，自动分析主体、风格、构图、色彩和光影，
+            输出适用于 Midjourney、Stable Diffusion、DALL-E 等工具的中英文结果。
+          </p>
+          <div class="hero-pills">
+            <span class="hero-pill">多模态识图</span>
+            <span class="hero-pill">多服务商切换</span>
+            <span class="hero-pill">扩展 + 网页双模式</span>
+          </div>
+        </div>
+        <div class="hero-side">
+          <div class="hero-tip-card">
+            <span class="hero-tip-label">推荐流程</span>
+            <ol class="hero-tip-list">
+              <li>先在右上角设置 API 与模型</li>
+              <li>拖拽图片或粘贴图片链接</li>
+              <li>点击生成并复制提示词</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
       <!-- Settings Modal -->
       <div id="settings-overlay" class="modal-overlay hidden">
         <div class="modal" id="settings-modal">
@@ -84,6 +110,7 @@
             <button id="btn-load-url" class="btn btn-secondary">加载</button>
           </div>
         </div>
+        <p class="upload-note">提示：独立网页使用图片 URL 时可能受跨域限制，优先推荐本地上传。</p>
       </section>
 
       <!-- Result Section -->

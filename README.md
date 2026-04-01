@@ -2,6 +2,16 @@
 
 一个基于多模态 AI 的图片识别与提示词生成工具。上传或选取图片，AI 自动分析内容、风格、构图、光影等元素，输出可直接用于 Midjourney、Stable Diffusion、DALL-E 等 AI 绘画工具的英文提示词，同时附带中文描述摘要。
 
+## 界面演示
+
+### 独立网页模式
+
+![独立网页模式演示](assets/screenshots/web-demo.png)
+
+### 扩展弹窗模式
+
+![扩展弹窗模式演示](assets/screenshots/popup-demo.png)
+
 ## 功能特点
 
 - **多种图片输入方式** — 拖拽上传、点击选择文件、粘贴图片 URL、右键网页图片
