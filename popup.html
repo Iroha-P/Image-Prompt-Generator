@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图片提示词生成器</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>图片提示词生成器</h1>
+      <div class="header-actions">
+        <p class="subtitle">右键点击网页图片 → 识别并生成提示词</p>
+        <button id="btn-fullscreen" class="btn btn-icon" title="全屏上传模式">🖥️</button>
+        <button id="btn-settings" class="btn btn-icon" title="设置">⚙️</button>
+      </div>
+    </header>
+
+    <!-- Settings Panel -->
+    <section id="settings-panel" class="settings-panel hidden">
+      <div class="setting-group">
+        <label for="provider-select">API 服务商</label>
+        <select id="provider-select">
+          <option value="siliconflow">硅基流动 SiliconFlow (国内推荐)</option>
+          <option value="google">Google Gemini</option>
+          <option value="anthropic">Claude (Anthropic)</option>
+          <option value="openai">OpenAI</option>
+          <option value="opencode">OpenCode Zen</option>
+          <option value="vtrix">Vtrix</option>
+        </select>
+      </div>
+      <div class="setting-group">
+        <label for="api-key-input" id="api-key-label">Google API Key</label>
+        <div class="input-row">
+          <input id="api-key-input" type="password" placeholder="AIzaSy..." autocomplete="off">
+          <button id="btn-toggle-key" class="btn btn-icon" title="显示/隐藏">👁️</button>
+        </div>
+        <a id="api-key-link" class="help-link" href="https://aistudio.google.com/apikey" target="_blank">获取 Google API Key →</a>
+      </div>
+      <div class="setting-group">
+        <label for="model-select">模型</label>
+        <select id="model-select">
+          <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+          <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash Lite</option>
+          <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+        </select>
+      </div>
+      <button id="btn-save-settings" class="btn btn-primary btn-sm">保存设置</button>
+    </section>
+
+    <!-- Empty State -->
+    <section id="empty-state" class="empty-state">
+      <div class="empty-icon">🖼️</div>
+      <p>暂无选中的图片</p>
+      <p class="hint">在网页中右键点击任意图片，选择「识别图片并生成提示词」</p>
+    </section>
+
+    <!-- Result Section -->
+    <section id="result-section" class="result-section hidden">
+      <div class="image-preview">
+        <img id="preview-img" src="" alt="预览图片">
+      </div>
+
+      <div class="action-bar">
+        <button id="btn-generate" class="btn btn-primary">
+          <span class="btn-text">生成提示词</span>
+          <span class="btn-loading hidden">识别中...</span>
+        </button>
+      </div>
+
+      <div id="prompt-output" class="prompt-output hidden">
+        <div class="prompt-header">
+          <span class="prompt-label">生成的提示词</span>
+          <button id="btn-copy" class="btn btn-ghost" title="复制">📋 复制</button>
+        </div>
+        <div id="prompt-text" class="prompt-text"></div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span class="version">v1.0.0</span>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast hidden">已复制到剪贴板</div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
