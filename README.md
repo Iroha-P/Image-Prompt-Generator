@@ -4,6 +4,8 @@
 
 An AI-powered multimodal image analysis and prompt generation tool. Upload or select an image, let AI analyze the subject, style, composition, lighting, and color palette, then generate prompts you can use directly with Midjourney, Stable Diffusion, DALL-E, and similar tools.
 
+[![Download Latest Release](https://img.shields.io/badge/Download-v1.1.0-6366f1?style=for-the-badge)](https://github.com/Iroha-P/Image-Prompt-Generator/releases/tag/v1.1.0)
+
 ## Screenshots
 
 ### Standalone Web Mode

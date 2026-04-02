@@ -4,6 +4,8 @@
 
 画像をアップロードまたは選択すると、AI が被写体、スタイル、構図、色彩、光の表現を分析し、Midjourney、Stable Diffusion、DALL-E などで使える英語プロンプトを生成するマルチモーダル画像解析ツールです。
 
+[![最新版をダウンロード](https://img.shields.io/badge/Download-v1.1.0-6366f1?style=for-the-badge)](https://github.com/Iroha-P/Image-Prompt-Generator/releases/tag/v1.1.0)
+
 ## スクリーンショット
 
 ### Web モード
