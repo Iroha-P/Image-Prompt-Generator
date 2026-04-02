@@ -1,0 +1,11 @@
+{
+  "extension_name": {
+    "message": "Image Prompt Generator"
+  },
+  "extension_description": {
+    "message": "Recognize web images and generate AI art prompts."
+  },
+  "action_title": {
+    "message": "Image Prompt Generator"
+  }
+}

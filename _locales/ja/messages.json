@@ -1,0 +1,11 @@
+{
+  "extension_name": {
+    "message": "画像プロンプト生成ツール"
+  },
+  "extension_description": {
+    "message": "Web 画像を認識して AI 描画用プロンプトを生成します。"
+  },
+  "action_title": {
+    "message": "画像プロンプト生成ツール"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "extension_name": {
+    "message": "图片提示词生成器"
+  },
+  "extension_description": {
+    "message": "识别网页图片并生成 AI 绘画提示词。"
+  },
+  "action_title": {
+    "message": "图片提示词生成器"
+  }
+}
