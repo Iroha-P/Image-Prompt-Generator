@@ -1,111 +1,5 @@
-// ---- System Prompt ----
-
-const SYSTEM_PROMPT = [
-  "你是一个专业的图片分析与提示词生成助手。",
-  "用户会给你一张图片，你需要：",
-  "1. 仔细分析图片中的内容、风格、色彩、构图、光影等元素",
-  "2. 生成一段详细的、可用于 AI 绘画（如 Midjourney、Stable Diffusion、DALL-E）的英文提示词",
-  "3. 同时提供一段中文描述摘要",
-  "",
-  "输出格式：",
-  "【中文描述】",
-  "（简要中文描述）",
-  "",
-  "【English Prompt】",
-  "（详细英文提示词，包含主体、风格、色调、光影、构图等）"
-].join("\n");
-
-// ---- Provider / Model Config ----
-
-const MODELS = {
-  siliconflow: [
-    { value: "THUDM/GLM-4.1V-9B-Thinking", label: "GLM-4.1V-9B Thinking (免费)" },
-    { value: "Qwen/Qwen3-VL-8B-Instruct", label: "Qwen3-VL-8B (极低价)" },
-    { value: "Qwen/Qwen3-VL-30B-A3B-Instruct", label: "Qwen3-VL-30B (低价)" },
-    { value: "Qwen/Qwen3-VL-32B-Instruct", label: "Qwen3-VL-32B (推荐)" },
-    { value: "zai-org/GLM-4.6V", label: "GLM-4.6V" },
-    { value: "Qwen/Qwen2.5-VL-72B-Instruct", label: "Qwen2.5-VL-72B (高质量)" }
-  ],
-  google: [
-    { value: "gemini-3-flash", label: "Gemini 3 Flash (推荐)" },
-    { value: "gemini-3.1-pro", label: "Gemini 3.1 Pro" },
-    { value: "gemini-3.1-flash-lite", label: "Gemini 3.1 Flash Lite" },
-    { value: "gemini-2.0-flash", label: "Gemini 2.0 Flash" },
-    { value: "gemini-2.0-flash-lite", label: "Gemini 2.0 Flash Lite" },
-    { value: "gemini-1.5-pro", label: "Gemini 1.5 Pro" }
-  ],
-  anthropic: [
-    { value: "claude-sonnet-4-20250514", label: "Claude Sonnet 4" },
-    { value: "claude-3-5-sonnet-20241022", label: "Claude 3.5 Sonnet" },
-    { value: "claude-3-5-haiku-20241022", label: "Claude 3.5 Haiku (快速)" }
-  ],
-  openai: [
-    { value: "gpt-4o", label: "GPT-4o" },
-    { value: "gpt-4o-mini", label: "GPT-4o-mini" }
-  ],
-  opencode: [
-    { value: "anthropic/claude-sonnet-4-20250514", label: "Claude Sonnet 4" },
-    { value: "anthropic/claude-3-5-sonnet-20241022", label: "Claude 3.5 Sonnet" },
-    { value: "openai/gpt-4o", label: "GPT-4o" },
-    { value: "google/gemini-2.0-flash", label: "Gemini 2.0 Flash" }
-  ],
-  vtrix: [
-    { value: "gemini-3.1-pro-preview", label: "Gemini 3.1 Pro Preview (多模态)" },
-    { value: "vtrix-gemini-3-flash-preview", label: "Gemini 3 Flash Preview" },
-    { value: "vtrix-gemini-2.5-pro", label: "Gemini 2.5 Pro" },
-    { value: "vtrix-gemini-2.5-flash", label: "Gemini 2.5 Flash" },
-    { value: "vtrix-claude-opus-4.5", label: "Claude Opus 4.5" },
-    { value: "vtrix-claude-sonnet-4.5", label: "Claude Sonnet 4.5" },
-    { value: "vtrix-gpt-5-2", label: "GPT-5.2" },
-    { value: "vtrix-gpt-5", label: "GPT-5" },
-    { value: "vtrix-gpt-4o", label: "GPT-4o" },
-    { value: "vtrix-gpt-4-1", label: "GPT-4.1" },
-    { value: "vtrix-openai-o3", label: "OpenAI o3" }
-  ]
-};
-
-const PROVIDER_META = {
-  siliconflow: {
-    label: "硅基流动 API Key",
-    placeholder: "sk-...",
-    link: "https://cloud.siliconflow.cn/account/ak",
-    linkText: "获取硅基流动 API Key →"
-  },
-  google: {
-    label: "Google API Key",
-    placeholder: "AIzaSy...",
-    link: "https://aistudio.google.com/apikey",
-    linkText: "获取 Google API Key →"
-  },
-  anthropic: {
-    label: "Anthropic API Key",
-    placeholder: "sk-ant-...",
-    link: "https://console.anthropic.com/settings/keys",
-    linkText: "获取 Claude API Key →"
-  },
-  openai: {
-    label: "OpenAI API Key",
-    placeholder: "sk-proj-...",
-    link: "https://platform.openai.com/api-keys",
-    linkText: "获取 OpenAI API Key →"
-  },
-  opencode: {
-    label: "OpenCode API Key",
-    placeholder: "输入你的 OpenCode Key",
-    link: "https://opencode.ai/workspace",
-    linkText: "获取 OpenCode API Key →"
-  },
-  vtrix: {
-    label: "Vtrix API Key",
-    placeholder: "输入你的 Vtrix Key",
-    link: "https://vtrix.ai/settings?tab=api-keys",
-    linkText: "获取 Vtrix API Key →"
-  }
-};
-
-// ---- DOM Ready ----
-
 document.addEventListener("DOMContentLoaded", () => {
+  const i18n = window.ImagePromptI18n;
   const $ = (sel) => document.querySelector(sel);
 
   const uploadZone = $("#upload-zone");
@@ -121,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const promptText = $("#prompt-text");
   const btnCopy = $("#btn-copy");
   const toast = $("#toast");
+  const languageSelect = $("#language-select");
 
   const btnSettings = $("#btn-settings");
   const settingsOverlay = $("#settings-overlay");
@@ -133,13 +28,81 @@ document.addEventListener("DOMContentLoaded", () => {
   const modelSelect = $("#model-select");
   const btnSaveSettings = $("#btn-save-settings");
 
+  let currentLang = i18n.getCurrentLanguage();
   let currentImageBase64 = null;
   let currentImageMimeType = null;
-  let currentImageUrl = null;
 
-  loadSettings();
+  initialize();
 
-  // ---- Settings ----
+  function initialize() {
+    languageSelect.value = currentLang;
+    applyLanguage();
+    loadSettings();
+  }
+
+  function applyLanguage() {
+    const savedProvider = providerSelect.value || localStorage.getItem("ip_provider") || "siliconflow";
+    const savedModel = modelSelect.value || localStorage.getItem("ip_model") || "";
+
+    i18n.applyTranslations(currentLang, document);
+    updateProviderOptions(savedProvider);
+    updateProviderUI(savedProvider, savedModel);
+    languageSelect.value = currentLang;
+  }
+
+  function updateProviderOptions(selectedProvider) {
+    const options = i18n.getProviderOptions(currentLang);
+    providerSelect.innerHTML = "";
+
+    options.forEach((optionData) => {
+      const option = document.createElement("option");
+      option.value = optionData.value;
+      option.textContent = optionData.label;
+      providerSelect.appendChild(option);
+    });
+
+    providerSelect.value = selectedProvider;
+  }
+
+  function updateProviderUI(provider, selectedModel = "") {
+    const providerMeta = i18n.getProviderMeta(currentLang)[provider];
+    const models = i18n.getModels()[provider];
+
+    apiKeyLabel.textContent = providerMeta.label;
+    apiKeyInput.placeholder = providerMeta.placeholder;
+    apiKeyLink.href = providerMeta.link;
+    apiKeyLink.textContent = providerMeta.linkText;
+
+    modelSelect.innerHTML = "";
+    models.forEach((model) => {
+      const option = document.createElement("option");
+      option.value = model.value;
+      option.textContent = model.label;
+      modelSelect.appendChild(option);
+    });
+
+    modelSelect.value = models.some((model) => model.value === selectedModel)
+      ? selectedModel
+      : models[0].value;
+  }
+
+  function loadSettings() {
+    const provider = localStorage.getItem("ip_provider") || "siliconflow";
+    const apiKey = localStorage.getItem("ip_apiKey") || "";
+    const model = localStorage.getItem("ip_model") || "";
+
+    updateProviderOptions(provider);
+    updateProviderUI(provider, model);
+
+    if (apiKey) {
+      apiKeyInput.value = apiKey;
+    }
+  }
+
+  languageSelect.addEventListener("change", () => {
+    currentLang = i18n.setCurrentLanguage(languageSelect.value);
+    applyLanguage();
+  });
 
   btnSettings.addEventListener("click", () => {
     settingsOverlay.classList.remove("hidden");
@@ -147,8 +110,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   btnCloseSettings.addEventListener("click", closeSettings);
 
-  settingsOverlay.addEventListener("click", (e) => {
-    if (e.target === settingsOverlay) closeSettings();
+  settingsOverlay.addEventListener("click", (event) => {
+    if (event.target === settingsOverlay) {
+      closeSettings();
+    }
   });
 
   function closeSettings() {
@@ -170,50 +135,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const model = modelSelect.value;
 
     if (!apiKey) {
-      showToast("请输入 API Key");
+      showToast(i18n.t(currentLang, "toastEnterApiKey"));
       return;
     }
 
     localStorage.setItem("ip_provider", provider);
     localStorage.setItem("ip_apiKey", apiKey);
     localStorage.setItem("ip_model", model);
-    showToast("设置已保存");
+    showToast(i18n.t(currentLang, "toastSettingsSaved"));
     closeSettings();
   });
 
-  function updateProviderUI(provider) {
-    const meta = PROVIDER_META[provider];
-    apiKeyLabel.textContent = meta.label;
-    apiKeyInput.placeholder = meta.placeholder;
-    apiKeyLink.href = meta.link;
-    apiKeyLink.textContent = meta.linkText;
-
-    modelSelect.innerHTML = "";
-    for (const m of MODELS[provider]) {
-      const opt = document.createElement("option");
-      opt.value = m.value;
-      opt.textContent = m.label;
-      modelSelect.appendChild(opt);
-    }
-  }
-
-  function loadSettings() {
-    const provider = localStorage.getItem("ip_provider") || "siliconflow";
-    const apiKey = localStorage.getItem("ip_apiKey") || "";
-    const model = localStorage.getItem("ip_model") || "";
-
-    providerSelect.value = provider;
-    updateProviderUI(provider);
-    if (apiKey) apiKeyInput.value = apiKey;
-    if (model) modelSelect.value = model;
-  }
-
-  // ---- Image Upload ----
-
   dropArea.addEventListener("click", () => fileInput.click());
 
-  dropArea.addEventListener("dragover", (e) => {
-    e.preventDefault();
+  dropArea.addEventListener("dragover", (event) => {
+    event.preventDefault();
     dropArea.classList.add("drag-over");
   });
 
@@ -221,37 +157,38 @@ document.addEventListener("DOMContentLoaded", () => {
     dropArea.classList.remove("drag-over");
   });
 
-  dropArea.addEventListener("drop", (e) => {
-    e.preventDefault();
+  dropArea.addEventListener("drop", (event) => {
+    event.preventDefault();
     dropArea.classList.remove("drag-over");
-    const file = e.dataTransfer.files[0];
+    const file = event.dataTransfer.files[0];
     if (file && file.type.startsWith("image/")) {
       loadImageFile(file);
     } else {
-      showToast("请拖入图片文件");
+      showToast(i18n.t(currentLang, "toastDropImageFile"));
     }
   });
 
   fileInput.addEventListener("change", () => {
     const file = fileInput.files[0];
-    if (file) loadImageFile(file);
+    if (file) {
+      loadImageFile(file);
+    }
   });
 
   btnLoadUrl.addEventListener("click", loadFromUrl);
 
-  urlInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") loadFromUrl();
+  urlInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      loadFromUrl();
+    }
   });
 
   function loadImageFile(file) {
     const reader = new FileReader();
-    reader.onload = (e) => {
-      const dataUrl = e.target.result;
-      const base64 = dataUrl.split(",")[1];
-      const mimeType = file.type || "image/jpeg";
-      currentImageBase64 = base64;
-      currentImageMimeType = mimeType;
-      currentImageUrl = null;
+    reader.onload = (event) => {
+      const dataUrl = event.target.result;
+      currentImageBase64 = dataUrl.split(",")[1];
+      currentImageMimeType = file.type || "image/jpeg";
       showPreview(dataUrl);
     };
     reader.readAsDataURL(file);
@@ -260,19 +197,18 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadFromUrl() {
     const url = urlInput.value.trim();
     if (!url) {
-      showToast("请输入图片 URL");
+      showToast(i18n.t(currentLang, "toastEnterImageUrl"));
       return;
     }
 
     try {
-      showToast("正在加载图片...");
-      const { base64, mimeType } = await fetchImageAsBase64(url);
+      showToast(i18n.t(currentLang, "toastLoadingImage"));
+      const { base64, mimeType } = await fetchImageAsBase64(url, currentLang);
       currentImageBase64 = base64;
       currentImageMimeType = mimeType;
-      currentImageUrl = url;
       showPreview(`data:${mimeType};base64,${base64}`);
-    } catch (err) {
-      showToast("图片加载失败: " + err.message);
+    } catch (error) {
+      showToast(i18n.t(currentLang, "toastImageLoadFailed", { message: error.message }));
     }
   }
 
@@ -288,27 +224,24 @@ document.addEventListener("DOMContentLoaded", () => {
     uploadZone.classList.remove("hidden");
     currentImageBase64 = null;
     currentImageMimeType = null;
-    currentImageUrl = null;
     fileInput.value = "";
     urlInput.value = "";
   });
-
-  // ---- Generate ----
 
   btnGenerate.addEventListener("click", handleGenerate);
 
   async function handleGenerate() {
     if (!currentImageBase64) {
-      showToast("请先选择一张图片");
+      showToast(i18n.t(currentLang, "toastSelectImageFirst"));
       return;
     }
 
     const provider = localStorage.getItem("ip_provider") || "siliconflow";
     const apiKey = localStorage.getItem("ip_apiKey") || "";
-    const model = localStorage.getItem("ip_model") || MODELS[provider][0].value;
+    const model = localStorage.getItem("ip_model") || i18n.getModels()[provider][0].value;
 
     if (!apiKey) {
-      showToast("请先在设置中配置 API Key");
+      showToast(i18n.t(currentLang, "toastConfigApiKeyFirst"));
       settingsOverlay.classList.remove("hidden");
       return;
     }
@@ -316,28 +249,36 @@ document.addEventListener("DOMContentLoaded", () => {
     setLoading(true);
 
     try {
-      const result = await callAPI(provider, apiKey, model, currentImageBase64, currentImageMimeType);
+      const promptConfig = i18n.getPromptConfig(currentLang);
+      const result = await callAPI(
+        provider,
+        apiKey,
+        model,
+        currentImageBase64,
+        currentImageMimeType,
+        promptConfig,
+        currentLang
+      );
       promptText.textContent = result;
       promptCard.classList.remove("hidden");
-    } catch (err) {
-      promptText.textContent = "生成失败: " + err.message;
+    } catch (error) {
+      promptText.textContent = i18n.t(currentLang, "resultFailed", { message: error.message });
       promptCard.classList.remove("hidden");
     } finally {
       setLoading(false);
     }
   }
 
-  // ---- Copy ----
-
   btnCopy.addEventListener("click", () => {
     const text = promptText.textContent;
-    if (!text) return;
+    if (!text) {
+      return;
+    }
+
     navigator.clipboard.writeText(text).then(() => {
-      showToast("已复制到剪贴板");
+      showToast(i18n.t(currentLang, "toastCopied"));
     });
   });
-
-  // ---- UI Helpers ----
 
   function setLoading(loading) {
     btnGenerate.disabled = loading;
@@ -359,14 +300,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ---- Image Fetching ----
 
-async function fetchImageAsBase64(imageUrl) {
+async function fetchImageAsBase64(imageUrl, language) {
+  const i18n = window.ImagePromptI18n;
   let resp;
   try {
     resp = await fetch(imageUrl);
   } catch (e) {
-    throw new Error("无法访问图片地址，可能存在跨域限制");
+    throw new Error(i18n.t(language, "errorCannotAccessImageUrl"));
   }
-  if (!resp.ok) throw new Error(`图片下载失败 (HTTP ${resp.status})`);
+  if (!resp.ok) {
+    throw new Error(i18n.t(language, "errorImageDownloadHttp", { status: resp.status }));
+  }
 
   const blob = await resp.blob();
   const buffer = await blob.arrayBuffer();
@@ -380,20 +324,20 @@ async function fetchImageAsBase64(imageUrl) {
 
 // ---- API Dispatcher ----
 
-async function callAPI(provider, apiKey, model, base64, mimeType) {
+async function callAPI(provider, apiKey, model, base64, mimeType, promptConfig, language) {
   switch (provider) {
-    case "siliconflow": return callSiliconFlow(apiKey, model, base64, mimeType);
-    case "google":      return callGemini(apiKey, model, base64, mimeType);
-    case "anthropic":   return callClaude(apiKey, model, base64, mimeType);
-    case "opencode":    return callOpenCode(apiKey, model, base64, mimeType);
-    case "vtrix":       return callVtrix(apiKey, model, base64, mimeType);
-    default:            return callOpenAI(apiKey, model, base64, mimeType);
+    case "siliconflow": return callSiliconFlow(apiKey, model, base64, mimeType, promptConfig, language);
+    case "google":      return callGemini(apiKey, model, base64, mimeType, promptConfig, language);
+    case "anthropic":   return callClaude(apiKey, model, base64, mimeType, promptConfig, language);
+    case "opencode":    return callOpenCode(apiKey, model, base64, mimeType, promptConfig, language);
+    case "vtrix":       return callVtrix(apiKey, model, base64, mimeType, promptConfig, language);
+    default:            return callOpenAI(apiKey, model, base64, mimeType, promptConfig, language);
   }
 }
 
 // ---- SiliconFlow API ----
 
-async function callSiliconFlow(apiKey, model, base64, mimeType) {
+async function callSiliconFlow(apiKey, model, base64, mimeType, promptConfig, language) {
   const dataUrl = `data:${mimeType};base64,${base64}`;
 
   const response = await apiFetch("https://api.siliconflow.cn/v1/chat/completions", {
@@ -405,48 +349,48 @@ async function callSiliconFlow(apiKey, model, base64, mimeType) {
     body: JSON.stringify({
       model,
       messages: [
-        { role: "system", content: SYSTEM_PROMPT },
+        { role: "system", content: promptConfig.systemPrompt },
         {
           role: "user",
           content: [
             { type: "image_url", image_url: { url: dataUrl } },
-            { type: "text", text: "请分析这张图片并生成 AI 绘画提示词。" }
+            { type: "text", text: promptConfig.userPrompt }
           ]
         }
       ],
       max_tokens: 1000
     })
-  }, "硅基流动");
+  }, "SiliconFlow", language);
 
   return response.choices[0].message.content;
 }
 
 // ---- Google Gemini API ----
 
-async function callGemini(apiKey, model, base64, mimeType) {
+async function callGemini(apiKey, model, base64, mimeType, promptConfig, language) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
   const response = await apiFetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+      system_instruction: { parts: [{ text: promptConfig.systemPrompt }] },
       contents: [{
         parts: [
           { inline_data: { mime_type: mimeType, data: base64 } },
-          { text: "请分析这张图片并生成 AI 绘画提示词。" }
+          { text: promptConfig.userPrompt }
         ]
       }],
       generationConfig: { maxOutputTokens: 1000 }
     })
-  }, "Google");
+  }, "Google", language);
 
   return response.candidates[0].content.parts[0].text;
 }
 
 // ---- Anthropic Claude API ----
 
-async function callClaude(apiKey, model, base64, mimeType) {
+async function callClaude(apiKey, model, base64, mimeType, promptConfig, language) {
   const response = await apiFetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -458,23 +402,23 @@ async function callClaude(apiKey, model, base64, mimeType) {
     body: JSON.stringify({
       model,
       max_tokens: 1000,
-      system: SYSTEM_PROMPT,
+      system: promptConfig.systemPrompt,
       messages: [{
         role: "user",
         content: [
           { type: "image", source: { type: "base64", media_type: mimeType, data: base64 } },
-          { type: "text", text: "请分析这张图片并生成 AI 绘画提示词。" }
+          { type: "text", text: promptConfig.userPrompt }
         ]
       }]
     })
-  }, "Claude");
+  }, "Anthropic", language);
 
   return response.content[0].text;
 }
 
 // ---- OpenCode Zen API ----
 
-async function callOpenCode(apiKey, model, base64, mimeType) {
+async function callOpenCode(apiKey, model, base64, mimeType, promptConfig, language) {
   const dataUrl = `data:${mimeType};base64,${base64}`;
 
   const response = await apiFetch("https://opencode.ai/zen/v1/chat/completions", {
@@ -486,25 +430,25 @@ async function callOpenCode(apiKey, model, base64, mimeType) {
     body: JSON.stringify({
       model,
       messages: [
-        { role: "system", content: SYSTEM_PROMPT },
+        { role: "system", content: promptConfig.systemPrompt },
         {
           role: "user",
           content: [
             { type: "image_url", image_url: { url: dataUrl, detail: "high" } },
-            { type: "text", text: "请分析这张图片并生成 AI 绘画提示词。" }
+            { type: "text", text: promptConfig.userPrompt }
           ]
         }
       ],
       max_tokens: 1000
     })
-  }, "OpenCode");
+  }, "OpenCode", language);
 
   return response.choices[0].message.content;
 }
 
 // ---- OpenAI API ----
 
-async function callOpenAI(apiKey, model, base64, mimeType) {
+async function callOpenAI(apiKey, model, base64, mimeType, promptConfig, language) {
   const dataUrl = `data:${mimeType};base64,${base64}`;
 
   const response = await apiFetch("https://api.openai.com/v1/chat/completions", {
@@ -516,25 +460,25 @@ async function callOpenAI(apiKey, model, base64, mimeType) {
     body: JSON.stringify({
       model,
       messages: [
-        { role: "system", content: SYSTEM_PROMPT },
+        { role: "system", content: promptConfig.systemPrompt },
         {
           role: "user",
           content: [
             { type: "image_url", image_url: { url: dataUrl, detail: "high" } },
-            { type: "text", text: "请分析这张图片并生成 AI 绘画提示词。" }
+            { type: "text", text: promptConfig.userPrompt }
           ]
         }
       ],
       max_tokens: 1000
     })
-  }, "OpenAI");
+  }, "OpenAI", language);
 
   return response.choices[0].message.content;
 }
 
 // ---- Vtrix API ----
 
-async function callVtrix(apiKey, model, base64, mimeType) {
+async function callVtrix(apiKey, model, base64, mimeType, promptConfig, language) {
   const dataUrl = `data:${mimeType};base64,${base64}`;
 
   const response = await apiFetch("https://cloud.vtrix.ai/llm/chat/completions", {
@@ -546,35 +490,42 @@ async function callVtrix(apiKey, model, base64, mimeType) {
     body: JSON.stringify({
       model,
       messages: [
-        { role: "system", content: SYSTEM_PROMPT },
+        { role: "system", content: promptConfig.systemPrompt },
         {
           role: "user",
           content: [
             { type: "image_url", image_url: { url: dataUrl, detail: "high" } },
-            { type: "text", text: "请分析这张图片并生成 AI 绘画提示词。" }
+            { type: "text", text: promptConfig.userPrompt }
           ]
         }
       ],
       max_tokens: 1000
     })
-  }, "Vtrix");
+  }, "Vtrix", language);
 
   return response.choices[0].message.content;
 }
 
 // ---- Shared Fetch Wrapper ----
 
-async function apiFetch(url, options, providerName) {
+async function apiFetch(url, options, providerName, language) {
+  const i18n = window.ImagePromptI18n;
   let response;
   try {
     response = await fetch(url, options);
   } catch (e) {
-    throw new Error(`无法连接 ${providerName} API。请检查网络连接。(${e.message})`);
+    throw new Error(i18n.t(language, "errorConnectProvider", {
+      provider: providerName,
+      message: e.message
+    }));
   }
 
   if (!response.ok) {
     const raw = await response.text().catch(() => "");
-    let msg = `${providerName} API 请求失败 (${response.status})`;
+    let msg = i18n.t(language, "errorApiRequestFailed", {
+      provider: providerName,
+      status: response.status
+    });
     try {
       const err = JSON.parse(raw);
       if (err.error?.message) msg = err.error.message;
@@ -583,7 +534,7 @@ async function apiFetch(url, options, providerName) {
       if (raw) msg += `: ${raw.slice(0, 200)}`;
     }
     if (response.status === 403) {
-      msg += "\n\n请检查: 1) API Key 是否正确 2) 账户是否已完成实名认证 3) 所选模型是否可用";
+      msg += i18n.t(language, "errorCheck403");
     }
     throw new Error(msg);
   }

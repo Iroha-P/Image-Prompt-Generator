@@ -1,0 +1,97 @@
+[English](README.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md)
+
+# Image Prompt Generator / 图片提示词生成器
+
+一个基于多模态 AI 的图片识别与提示词生成工具。上传或选取图片，AI 自动分析内容、风格、构图、光影等元素，输出可直接用于 Midjourney、Stable Diffusion、DALL-E 等 AI 绘画工具的英文提示词，同时附带中文描述摘要。
+
+## 界面演示
+
+### 独立网页模式
+
+![独立网页模式演示](assets/screenshots/web-demo.png)
+
+### 扩展弹窗模式
+
+![扩展弹窗模式演示](assets/screenshots/popup-demo.png)
+
+## 功能特点
+
+- **多种图片输入方式**：拖拽上传、点击选择文件、粘贴图片 URL、右键网页图片
+- **多家 AI 服务商支持**：硅基流动、Google Gemini、Anthropic Claude、OpenAI、OpenCode Zen、Vtrix
+- **丰富的模型选择**：从免费模型到旗舰模型，包括 Gemini 3.1 Pro、Claude Opus 4.5、GPT-5.2 等
+- **双形态运行**：既可作为 Chrome 扩展使用，也可作为独立网页工具使用
+- **一键复制**：生成结果可快速复制到剪贴板
+- **多语言界面**：支持中文、英文、日文，首次打开自动跟随浏览器语言
+
+## 支持的 AI 服务商
+
+| 服务商 | 推荐场景 | API 格式 |
+|---|---|---|
+| **硅基流动 SiliconFlow** | 国内用户首选，有免费模型 | OpenAI 兼容 |
+| **Google Gemini** | Gemini 3 系列，高质量多模态 | Gemini API |
+| **Anthropic Claude** | Claude Sonnet / Haiku，稳定可靠 | Anthropic API |
+| **OpenAI** | GPT-4o 系列 | OpenAI API |
+| **OpenCode Zen** | 多模型聚合 | OpenAI 兼容 |
+| **Vtrix** | 全模型聚合（Gemini / Claude / GPT） | OpenAI 兼容 |
+
+## 使用方式
+
+### 方式一：独立网页工具
+
+直接在浏览器中打开 `index.html`，拖拽图片或粘贴 URL 即可使用。
+
+### 方式二：Chrome 扩展
+
+1. 打开 Chrome，进入 `chrome://extensions/`
+2. 开启右上角「开发者模式」
+3. 点击「加载已解压的扩展程序」，选择本项目文件夹
+4. 在网页中右键任意图片，选择「识别图片并生成提示词」
+5. 也可点击扩展弹窗中的全屏按钮进入全屏上传模式
+
+### 配置 API Key
+
+首次使用需配置 API Key：
+
+1. 点击「设置」按钮
+2. 选择 API 服务商
+3. 填入对应的 API Key
+4. 选择模型并保存
+
+## 项目结构
+
+```text
+Image-Prompt-Generator/
+├─ Web 独立网页
+│  ├─ index.html      # 入口页面
+│  ├─ app.js          # 页面逻辑与 API 调用
+│  ├─ i18n.js         # 中英日多语言字典与语言逻辑
+│  └─ style.css       # 页面样式
+├─ Chrome 扩展
+│  ├─ manifest.json   # 扩展配置
+│  ├─ background.js   # Service Worker / API 调用
+│  ├─ popup.html      # 扩展弹窗页面
+│  ├─ popup.js        # 扩展弹窗逻辑
+│  └─ popup.css       # 扩展弹窗样式
+├─ assets/
+│  └─ screenshots/    # README 演示图片
+└─ README*.md         # 多语言说明文档
+```
+
+## 输出示例
+
+```text
+【中文描述】
+这是一张动漫风格的截图。画面右侧是一个有着深紫色头发、绿眼睛的年轻女孩，她穿着带有红边的白色水手服，正回头微笑着。背景是窗外的黄昏或傍晚景色，窗玻璃上隐约映出她的倒影。整体色调柔和，带有怀旧的氛围。
+
+【English Prompt】
+anime style, a young girl with dark purple hair in a low bun, green eyes, smiling, looking back over her shoulder, wearing a white sailor uniform with red trim. She is indoors near a window. Outside the window is a dusk or twilight sky with orange and dark blue hues. The girl's faint reflection can be seen on the window glass. Soft lighting, nostalgic atmosphere, 2d animation, high quality, cinematic composition.
+```
+
+## 隐私说明
+
+- 所有 API Key 仅存储在本地浏览器中（`localStorage` / `chrome.storage`），不会上传到任何服务器
+- 图片数据仅在调用 AI 接口时传输给所选的 API 服务商，本工具不保存任何图片
+
+## License
+
+MIT

@@ -1,93 +1,96 @@
-# Image Prompt Generator / 图片提示词生成器
+[English](README.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md)
 
-一个基于多模态 AI 的图片识别与提示词生成工具。上传或选取图片，AI 自动分析内容、风格、构图、光影等元素，输出可直接用于 Midjourney、Stable Diffusion、DALL-E 等 AI 绘画工具的英文提示词，同时附带中文描述摘要。
+# Image Prompt Generator
 
-## 界面演示
+An AI-powered multimodal image analysis and prompt generation tool. Upload or select an image, let AI analyze the subject, style, composition, lighting, and color palette, then generate prompts you can use directly with Midjourney, Stable Diffusion, DALL-E, and similar tools.
 
-### 独立网页模式
+## Screenshots
 
-![独立网页模式演示](assets/screenshots/web-demo.png)
+### Standalone Web Mode
 
-### 扩展弹窗模式
+![Web Demo](assets/screenshots/web-demo.png)
 
-![扩展弹窗模式演示](assets/screenshots/popup-demo.png)
+### Chrome Extension Popup
 
-## 功能特点
+![Popup Demo](assets/screenshots/popup-demo.png)
 
-- **多种图片输入方式** — 拖拽上传、点击选择文件、粘贴图片 URL、右键网页图片
-- **多家 AI 服务商支持** — 硅基流动、Google Gemini、Anthropic Claude、OpenAI、OpenCode Zen、Vtrix
-- **丰富的模型选择** — 从免费模型到旗舰模型，包括 Gemini 3.1 Pro、Claude Opus 4.5、GPT-5.2 等
-- **双形态运行** — 既可作为 Chrome 扩展使用（右键识别网页图片），也可作为独立网页工具使用
-- **一键复制** — 生成的提示词可一键复制到剪贴板
-- **设置持久化** — API Key 和偏好设置自动保存
+## Features
 
-## 支持的 AI 服务商
+- **Multiple image inputs**: drag and drop, file picker, image URL, or right-click a web image
+- **6 AI providers**: SiliconFlow, Google Gemini, Anthropic Claude, OpenAI, OpenCode Zen, and Vtrix
+- **Rich model selection**: includes Gemini 3.1 Pro, Claude Opus 4.5, GPT-5.2, and more
+- **Two usage modes**: Chrome extension and standalone web app
+- **One-click copy**: quickly copy generated prompts to the clipboard
+- **Multilingual UI**: supports English, Chinese, and Japanese with automatic browser-language detection
 
-| 服务商 | 推荐场景 | API 格式 |
+## Supported Providers
+
+| Provider | Best for | API format |
 |---|---|---|
-| **硅基流动 SiliconFlow** | 国内用户首选，有免费模型 | OpenAI 兼容 |
-| **Google Gemini** | Gemini 3 系列，高质量多模态 | Gemini API |
-| **Anthropic Claude** | Claude Sonnet/Haiku，稳定可靠 | Anthropic API |
-| **OpenAI** | GPT-4o 系列 | OpenAI API |
-| **OpenCode Zen** | 多模型聚合 | OpenAI 兼容 |
-| **Vtrix** | 全模型聚合（Gemini/Claude/GPT） | OpenAI 兼容 |
+| **SiliconFlow** | Recommended for users in China, includes free models | OpenAI-compatible |
+| **Google Gemini** | High-quality multimodal understanding | Gemini API |
+| **Anthropic Claude** | Reliable reasoning quality | Anthropic API |
+| **OpenAI** | GPT-4o family | OpenAI API |
+| **OpenCode Zen** | Aggregated multi-model access | OpenAI-compatible |
+| **Vtrix** | Unified access to Gemini / Claude / GPT models | OpenAI-compatible |
 
-## 使用方式
+## Usage
 
-### 方式一：独立网页工具
+### Option 1: Standalone web app
 
-直接在浏览器中打开 `index.html`，拖拽图片或粘贴 URL 即可使用。
+Open `index.html` in your browser, then upload an image or paste an image URL.
 
-### 方式二：Chrome 扩展
+### Option 2: Chrome extension
 
-1. 打开 Chrome，进入 `chrome://extensions/`
-2. 开启右上角「开发者模式」
-3. 点击「加载已解压的扩展程序」，选择本项目文件夹
-4. 在网页中右键任意图片 → 选择「识别图片并生成提示词」
-5. 也可点击扩展弹窗中的 🖥️ 按钮进入全屏上传模式
+1. Open `chrome://extensions/`
+2. Enable **Developer mode**
+3. Click **Load unpacked** and select this project folder
+4. Right-click any image on a web page and choose the prompt generation action
+5. You can also open fullscreen upload mode from the extension popup
 
-### 配置 API Key
+### Configure API key
 
-首次使用需配置 API Key：
+On first use:
 
-1. 点击「设置」按钮
-2. 选择 API 服务商
-3. 填入对应的 API Key（从服务商官网获取）
-4. 选择模型并保存
+1. Open **Settings**
+2. Choose an AI provider
+3. Enter your API key
+4. Select a model and save
 
-## 项目结构
+## Project Structure
 
-```
+```text
 Image-Prompt-Generator/
-├─ Web 独立网页
-│  ├─ index.html      # 入口页面
-│  ├─ app.js          # 页面逻辑与 API 调用
-│  └─ style.css       # 页面样式
-├─ Chrome 扩展
-│  ├─ manifest.json   # 扩展配置
-│  ├─ background.js   # Service Worker / API 调用
-│  ├─ popup.html      # 扩展弹窗页面
-│  ├─ popup.js        # 扩展弹窗逻辑
-│  └─ popup.css       # 扩展弹窗样式
+├─ Standalone web app
+│  ├─ index.html      # Entry page
+│  ├─ app.js          # UI logic and direct API calls
+│  ├─ i18n.js         # Shared translations and language helpers
+│  └─ style.css       # Web styles
+├─ Chrome extension
+│  ├─ manifest.json   # Extension manifest
+│  ├─ background.js   # Service worker and API calls
+│  ├─ popup.html      # Popup page
+│  ├─ popup.js        # Popup logic
+│  └─ popup.css       # Popup styles
 ├─ assets/
-│  └─ screenshots/    # README 演示图片
-└─ README.md
+│  └─ screenshots/    # README screenshots
+└─ README*.md         # Multilingual documentation
 ```
 
-## 输出示例
+## Example Output
 
-```
-【中文描述】
-这是一张动漫风格的截图。画面右侧是一个有着深紫色头发、绿眼睛的年轻女孩，她穿着带有红边的白色水手服，正回头微笑着。背景是窗外的黄昏或傍晚景色，窗玻璃上隐约映出她的倒影。整体色调柔和，带有怀旧的氛围。
+```text
+[Summary]
+This is an anime-style screenshot. On the right side of the frame is a young girl with dark purple hair and green eyes. She is wearing a white sailor-style uniform with red trim and looking back with a gentle smile. Outside the window is a dusk sky, and her faint reflection can be seen in the glass. The overall mood is soft and nostalgic.
 
-【English Prompt】
+[English Prompt]
 anime style, a young girl with dark purple hair in a low bun, green eyes, smiling, looking back over her shoulder, wearing a white sailor uniform with red trim. She is indoors near a window. Outside the window is a dusk or twilight sky with orange and dark blue hues. The girl's faint reflection can be seen on the window glass. Soft lighting, nostalgic atmosphere, 2d animation, high quality, cinematic composition.
 ```
 
-## 隐私说明
+## Privacy
 
-- 所有 API Key 仅存储在本地浏览器中（localStorage / chrome.storage），不会上传到任何服务器
-- 图片数据仅在调用 AI 接口时传输给所选的 API 服务商，本工具不保存任何图片
+- API keys are stored only in the local browser environment (`localStorage` / `chrome.storage`)
+- Image data is sent only to the selected AI provider during generation and is not stored by this tool
 
 ## License
 
